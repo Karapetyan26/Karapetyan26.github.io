@@ -18,7 +18,6 @@
             color: #333;
         }
 
-        /* ===== СПИСКИ ===== */
         ul {
             line-height: 1.6;
         }
@@ -31,7 +30,6 @@
             margin-top: 6px;
         }
 
-        /* ===== ССЫЛКИ ===== */
         a {
             color: #0645ad;
         }
@@ -56,6 +54,7 @@
         }
 
         input[type="text"],
+        input[type="tel"],
         input[type="email"],
         input[type="date"],
         select,
@@ -82,7 +81,30 @@
             background-color: #333;
         }
 
-        /* ===== КРАСНАЯ ПОДСВЕТКА ПУСТЫХ ПОЛЕЙ ===== */
+        /* ===== БЛОК ЧЕКБОКСОВ ДЛЯ ЯЗЫКОВ ===== */
+        .lang-box {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+
+        .lang-box label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .lang-box input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        /* ===== ВАЛИДАЦИЯ ===== */
         input:required:invalid,
         textarea:required:invalid,
         select:required:invalid {
@@ -90,12 +112,39 @@
             background-color: #ffe6e6;
         }
 
-        /* Зелёная подсветка заполненных полей */
         input:required:valid,
         textarea:required:valid,
         select:required:valid {
             border: 2px solid green;
             background-color: #e6ffe6;
+        }
+
+        /* Подсказка */
+        .hint {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* Красная подсветка блока с ошибкой */
+        .error-block {
+            border: 2px solid red;
+            background-color: #ffe6e6;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        /* Стиль для чекбокса контракта */
+        #contract-block label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        #contract-block input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -114,9 +163,7 @@
         </li>
         <li>4. <a href="/about.html">Сокращенная ссылка на внутреннюю страницу</a></li>
         <li>5. <a href="/">Сокращенная ссылка на главную</a></li>
-        <li>6. <a href="https://www.kubsu.ru/ru/university/departments#:~:text=%D0%92%D1%81%D0%B5%20%D1%84%D0%B0%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D0%B5%D1%82%D1%8B%20%D0%9A%D1%83%D0%B1%D0%93%D0%A3,%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D0%B5%D0%B3%D0%BE%20%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F">
-            Ссылка на фрагмент текущей страницы</a>
-        </li>
+        <li>6. <a href="https://www.kubsu.ru/ru/university/departments">Ссылка на фрагмент текущей страницы</a></li>
         <li>7. <a href="https://kubsu.ru/?page=1&sort=asc&user=test">Ссылка с тремя параметрами в URL</a></li>
         <li>8. <a href="https://kubsu.ru/?id=12345">Ссылка с параметром id в URL</a></li>
         <li>9. <a href="page.html">Относительная на страницу в текущем каталоге</a></li>
@@ -167,21 +214,48 @@
     <h1>Форма обратной связи</h1>
 
     <form action="" method="get">
+
+        <!-- ФИО -->
         <label>
             ФИО:<br>
-            <input name="field-name-1" placeholder="Введите ваше ФИО" required>
+            <input
+                name="field-name-1"
+                type="text"
+                placeholder="Иванов Иван Иванович"
+                pattern="^[А-Яа-яЁёA-Za-z\s\-]+$"
+                title="Только буквы, пробелы и дефис"
+                required>
+            <div class="hint">Только буквы, пробелы и дефис</div>
         </label>
 
+        <!-- Телефон -->
+        <label>
+            Номер телефона:<br>
+            <input
+                id="phone"
+                name="field-phone"
+                type="tel"
+                placeholder="+7 (900) 123-45-67"
+                pattern="^\+?[0-9\s\-\(\)]{10,20}$"
+                title="Только цифры, +, пробелы, скобки и дефисы"
+                required>
+            <div class="hint">Например: +7 (900) 123-45-67</div>
+        </label>
+
+        <!-- Email -->
         <label>
             Email:<br>
             <input name="field-email" type="email" placeholder="Введите вашу почту" required>
         </label>
 
+        <!-- Дата рождения -->
         <label>
             Дата рождения:<br>
-            <input name="field-date" type="date" required>
+            <input id="birthdate" name="field-date" type="date" required>
+            <div class="hint">Нельзя выбрать будущую дату</div>
         </label>
 
+        <!-- Пол -->
         <p>Пол:<br>
             <label>
                 <input type="radio" name="gender" value="male" checked>
@@ -193,49 +267,67 @@
             </label>
         </p>
 
-        <label>
-            Любимый язык программирования:<br>
-            <select name="field-name-3" required>
-                <option value="">-- Выберите язык --</option>
-                <option value="pascal">Pascal</option>
-                <option value="c">C</option>
-                <option value="cpp">C++</option>
-                <option value="javascript">JavaScript</option>
-                <option value="php">PHP</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="haskell">Haskell</option>
-                <option value="clojure">Clojure</option>
-                <option value="prolog">Prolog</option>
-                <option value="scala">Scala</option>
-            </select>
-        </label>
+        <!-- Языки программирования -->
+        <p>Любимые языки программирования (можно выбрать несколько):</p>
+        <div class="lang-box">
+            <label><input type="checkbox" name="lang[]" value="pascal"> Pascal</label>
+            <label><input type="checkbox" name="lang[]" value="c"> C</label>
+            <label><input type="checkbox" name="lang[]" value="cpp"> C++</label>
+            <label><input type="checkbox" name="lang[]" value="javascript"> JavaScript</label>
+            <label><input type="checkbox" name="lang[]" value="php"> PHP</label>
+            <label><input type="checkbox" name="lang[]" value="python"> Python</label>
+            <label><input type="checkbox" name="lang[]" value="java"> Java</label>
+            <label><input type="checkbox" name="lang[]" value="haskell"> Haskell</label>
+            <label><input type="checkbox" name="lang[]" value="clojure"> Clojure</label>
+            <label><input type="checkbox" name="lang[]" value="prolog"> Prolog</label>
+            <label><input type="checkbox" name="lang[]" value="scala"> Scala</label>
+        </div>
 
-        <label>
+        <!-- Биография -->
+        <label style="margin-top: 12px;">
             Биография:<br>
             <textarea name="biography" rows="6" cols="40" placeholder="Расскажите о себе..." required></textarea>
         </label>
 
-        <p>С контрактом ознакомлен:<br>
+        <!-- Согласие с контрактом: чекбокс -->
+        <p id="contract-block">
             <label>
-                <input type="radio" checked name="radio-group-1" value="Значение1">
-                Да
-            </label>
-            <label>
-                <input type="radio" name="radio-group-1" value="Значение2">
-                Нет
-            </label>
-        </p>
-
-        <p>Чекбокс:<br>
-            <label>
-                <input type="checkbox" checked name="check-1">
-                Подпись чекбокса ставим справа
+                <input type="checkbox" id="contract-check" name="contract" required>
+                С контрактом ознакомлен
             </label>
         </p>
 
         <input type="submit" value="Отправить">
     </form>
+
+    <!-- ===== СКРИПТЫ ===== -->
+    <script>
+        // ===== Ограничение даты рождения =====
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('birthdate').setAttribute('max', today);
+
+        // ===== Проверка галочки "С контрактом ознакомлен" =====
+        const form = document.querySelector('form');
+        const contractBlock = document.getElementById('contract-block');
+        const contractCheck = document.getElementById('contract-check');
+
+        form.addEventListener('submit', function(event) {
+            if (!contractCheck.checked) {
+                event.preventDefault();
+                contractBlock.classList.add('error-block');
+                alert('Поставьте галочку "С контрактом ознакомлен"');
+            } else {
+                contractBlock.classList.remove('error-block');
+            }
+        });
+
+        // Убираем подсветку, как только галочка поставлена
+        contractCheck.addEventListener('change', function() {
+            if (this.checked) {
+                contractBlock.classList.remove('error-block');
+            }
+        });
+    </script>
 
 </body>
 </html>
